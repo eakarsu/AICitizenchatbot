@@ -49,6 +49,62 @@ function Layout() {
             <span className="nav-icon">{'\uD83E\uDD16'}</span>
             {!sidebarCollapsed && <span className="nav-label">AI Chatbot</span>}
           </NavLink>
+
+          {!sidebarCollapsed && <div style={{ padding: '8px 16px', fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', marginTop: 12 }}>AI Tools</div>}
+          <NavLink to="/service-finder" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'\uD83D\uDD0E'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Service Finder</span>}
+          </NavLink>
+          <NavLink to="/complaint-classifier" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'\uD83D\uDCDD'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Complaint Classifier</span>}
+          </NavLink>
+          <NavLink to="/appointment-helper" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'\uD83D\uDCC5'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Appointment Helper</span>}
+          </NavLink>
+          <NavLink to="/permit-guide" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'\uD83D\uDCC4'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Permit Guide</span>}
+          </NavLink>
+          <NavLink to="/permit-eligibility" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'✅'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Permit Eligibility</span>}
+          </NavLink>
+          <NavLink to="/categorize-feedback" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'🏷️'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Categorize Feedback</span>}
+          </NavLink>
+          <NavLink to="/resource-navigator" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'\uD83C\uDF1F'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Resource Navigator</span>}
+          </NavLink>
+          <NavLink to="/multi-language" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'\uD83C\uDF10'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Multi-language</span>}
+          </NavLink>
+          <NavLink to="/accessibility" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'\u267F'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Accessibility</span>}
+          </NavLink>
+
+          {!sidebarCollapsed && <div style={{ padding: '8px 16px', fontSize: 11, color: '#9ca3af', textTransform: 'uppercase', marginTop: 12 }}>Engagement</div>}
+          <NavLink to="/feedback" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'\uD83D\uDCAC'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Submit Feedback</span>}
+          </NavLink>
+          <NavLink to="/admin-analytics" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'\uD83D\uDCCA'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Admin Analytics</span>}
+          </NavLink>
+          <NavLink to="/notifications" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'🔔'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Notifications</span>}
+          </NavLink>
+          <NavLink to="/exports" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'📄'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Reports & Exports</span>}
+          </NavLink>
         </nav>
 
         <div className="sidebar-footer">

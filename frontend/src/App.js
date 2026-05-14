@@ -5,6 +5,19 @@ import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import FeaturePage from './components/FeaturePage';
 import Chatbot from './components/Chatbot';
+import ServiceFinder from './components/ServiceFinder';
+import ComplaintClassifier from './components/ComplaintClassifier';
+import AppointmentHelper from './components/AppointmentHelper';
+import PermitGuide from './components/PermitGuide';
+import AdminAnalytics from './components/AdminAnalytics';
+import FeedbackForm from './components/FeedbackForm';
+import ResourceNavigator from './components/ResourceNavigator';
+import MultiLanguage from './components/MultiLanguage';
+import AccessibilityParaphrase from './components/AccessibilityParaphrase';
+import Notifications from './components/Notifications';
+import Exports from './components/Exports';
+import PermitEligibility from './components/PermitEligibility';
+import CategorizeFeedback from './components/CategorizeFeedback';
 import features from './config/features';
 import './App.css';
 
@@ -35,6 +48,19 @@ function App() {
             />
           ))}
           <Route path="chatbot" element={<Chatbot />} />
+          <Route path="service-finder" element={<ServiceFinder />} />
+          <Route path="complaint-classifier" element={<ComplaintClassifier />} />
+          <Route path="appointment-helper" element={<AppointmentHelper />} />
+          <Route path="permit-guide" element={<PermitGuide />} />
+          <Route path="resource-navigator" element={<ResourceNavigator />} />
+          <Route path="multi-language" element={<MultiLanguage />} />
+          <Route path="accessibility" element={<AccessibilityParaphrase />} />
+          <Route path="feedback" element={<FeedbackForm />} />
+          <Route path="admin-analytics" element={<AdminAnalytics />} />
+          <Route path="notifications" element={<Notifications />} />
+          <Route path="exports" element={<Exports />} />
+          <Route path="permit-eligibility" element={<PermitEligibility />} />
+          <Route path="categorize-feedback" element={<CategorizeFeedback />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

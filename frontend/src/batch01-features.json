@@ -1,0 +1,104 @@
+{
+  "project": "AICitizenchatbot",
+  "marker": "// === Batch 01 Gaps & Frontend Mounts ===",
+  "features": [
+    {
+      "slug": "agentic-311-concierge-that-completes-service-reque",
+      "component": "Agentic311ConciergeThatCompletesServiceRequePage",
+      "label": "Agentic 311 concierge that completes service requests end-to-end with status updates",
+      "endpoint": "/api/cf-agentic-311-concierge-that-completes-service-reque",
+      "kind": "cfs"
+    },
+    {
+      "slug": "rag-over-city-ordinances-faqs-and-council-minutes",
+      "component": "RagOverCityOrdinancesFaqsAndCouncilMinutesPage",
+      "label": "RAG over city ordinances, FAQs, and council minutes",
+      "endpoint": "/api/cf-rag-over-city-ordinances-faqs-and-council-minutes",
+      "kind": "cfs"
+    },
+    {
+      "slug": "real-time-outage-emergency-broadcast-with-citywide",
+      "component": "RealTimeOutageEmergencyBroadcastWithCitywidePage",
+      "label": "Real-time outage / emergency broadcast with citywide push notifications",
+      "endpoint": "/api/cf-real-time-outage-emergency-broadcast-with-citywide",
+      "kind": "cfs"
+    },
+    {
+      "slug": "white-label-deployment-for-small-medium-municipali",
+      "component": "WhiteLabelDeploymentForSmallMediumMunicipaliPage",
+      "label": "White-label deployment for small/medium municipalities",
+      "endpoint": "/api/cf-white-label-deployment-for-small-medium-municipali",
+      "kind": "cfs"
+    },
+    {
+      "slug": "0-mounted-ai-endpoints-in-chatbot-js-chatbotnew-js",
+      "component": "Gap0MountedAiEndpointsInChatbotJsChatbotnewJsPage",
+      "label": "0 mounted AI endpoints in chatbot.js/chatbotNew.js despite the project name",
+      "endpoint": "/api/gap-0-mounted-ai-endpoints-in-chatbot-js-chatbotnew-js",
+      "kind": "gap"
+    },
+    {
+      "slug": "no-multilingual-support-for-non-english-speaking-r",
+      "component": "NoMultilingualSupportForNonEnglishSpeakingRPage",
+      "label": "No multilingual support for non-English speaking residents",
+      "endpoint": "/api/gap-no-multilingual-support-for-non-english-speaking-r",
+      "kind": "gap"
+    },
+    {
+      "slug": "no-ai-311-ticket-triage-and-routing",
+      "component": "NoAi311TicketTriageAndRoutingPage",
+      "label": "No AI 311-ticket triage and routing",
+      "endpoint": "/api/gap-no-ai-311-ticket-triage-and-routing",
+      "kind": "gap"
+    },
+    {
+      "slug": "no-ai-form-filling-assistance-for-permits-licenses",
+      "component": "NoAiFormFillingAssistanceForPermitsLicensesPage",
+      "label": "No AI form-filling assistance for permits/licenses",
+      "endpoint": "/api/gap-no-ai-form-filling-assistance-for-permits-licenses",
+      "kind": "gap"
+    },
+    {
+      "slug": "frontend-pages-folder-is-empty-no-spa-ui-shipped",
+      "component": "FrontendPagesFolderIsEmptyNoSpaUiShippedPage",
+      "label": "Frontend pages folder is empty \u2014 no SPA UI shipped",
+      "endpoint": "/api/gap-frontend-pages-folder-is-empty-no-spa-ui-shipped",
+      "kind": "gap"
+    },
+    {
+      "slug": "notification-routes-exist-but-no-sms-email-deliver",
+      "component": "NotificationRoutesExistButNoSmsEmailDeliverPage",
+      "label": "Notification routes exist but no SMS/email delivery channel",
+      "endpoint": "/api/gap-notification-routes-exist-but-no-sms-email-deliver",
+      "kind": "gap"
+    },
+    {
+      "slug": "no-webhook-outbound-api",
+      "component": "NoWebhookOutboundApiPage",
+      "label": "No webhook outbound API",
+      "endpoint": "/api/gap-no-webhook-outbound-api",
+      "kind": "gap"
+    },
+    {
+      "slug": "no-gis-mapping-integration",
+      "component": "NoGisMappingIntegrationPage",
+      "label": "No GIS / mapping integration",
+      "endpoint": "/api/gap-no-gis-mapping-integration",
+      "kind": "gap"
+    },
+    {
+      "slug": "no-accessibility-wcag-audits-and-voice-first-inter",
+      "component": "NoAccessibilityWcagAuditsAndVoiceFirstInterPage",
+      "label": "No accessibility (WCAG) audits and voice-first interface",
+      "endpoint": "/api/gap-no-accessibility-wcag-audits-and-voice-first-inter",
+      "kind": "gap"
+    },
+    {
+      "slug": "no-sla-tracking-on-service-catalog",
+      "component": "NoSlaTrackingOnServiceCatalogPage",
+      "label": "No SLA tracking on service catalog",
+      "endpoint": "/api/gap-no-sla-tracking-on-service-catalog",
+      "kind": "gap"
+    }
+  ]
+}
