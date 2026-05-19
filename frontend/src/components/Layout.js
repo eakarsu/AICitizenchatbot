@@ -105,6 +105,10 @@ function Layout() {
             <span className="nav-icon">{'📄'}</span>
             {!sidebarCollapsed && <span className="nav-label">Reports & Exports</span>}
           </NavLink>
+          <NavLink to="/custom-views" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{'🗂️'}</span>
+            {!sidebarCollapsed && <span className="nav-label">Citizen Views</span>}
+          </NavLink>
         </nav>
 
         <div className="sidebar-footer">

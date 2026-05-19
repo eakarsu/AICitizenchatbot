@@ -18,6 +18,7 @@ import Notifications from './components/Notifications';
 import Exports from './components/Exports';
 import PermitEligibility from './components/PermitEligibility';
 import CategorizeFeedback from './components/CategorizeFeedback';
+import CustomViewsPage from './components/CustomViewsPage';
 import features from './config/features';
 import './App.css';
 
@@ -61,6 +62,7 @@ function App() {
           <Route path="exports" element={<Exports />} />
           <Route path="permit-eligibility" element={<PermitEligibility />} />
           <Route path="categorize-feedback" element={<CategorizeFeedback />} />
+          <Route path="custom-views" element={<CustomViewsPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

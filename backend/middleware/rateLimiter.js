@@ -1,4 +1,4 @@
-const rateLimit = require('express-rate-limit');
+const { rateLimit, ipKeyGenerator } = require('express-rate-limit');
 
 // 30 chat messages per hour per IP — no auth required for citizens
 const chatLimiter = rateLimit({
@@ -10,7 +10,7 @@ const chatLimiter = rateLimit({
     success: false,
     error: 'Too many requests. Citizens are limited to 30 chat messages per hour. Please try again later.'
   },
-  keyGenerator: (req) => req.ip,
+  keyGenerator: (req) => ipKeyGenerator(req.ip),
 });
 
 module.exports = { chatLimiter };

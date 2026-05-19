@@ -40,6 +40,9 @@ app.use('/api/exports', require('./routes/exports'));
 // Apply pass 4 — AI backlog endpoints (permit-eligibility, categorize-feedback)
 app.use('/api/ai', require('./routes/aiBacklog'));
 
+// Custom Views (Citizen Views) — 4 synthesized endpoints
+app.use('/api/custom-views', require('./routes/customViews'));
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'County Citizen Chatbot API is running' });
