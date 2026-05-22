@@ -42,6 +42,7 @@ app.use('/api/ai', require('./routes/aiBacklog'));
 
 // Custom Views (Citizen Views) — 4 synthesized endpoints
 app.use('/api/custom-views', require('./routes/customViews'));
+app.use('/api/service-sla-escalation', require('./routes/serviceSlaEscalation'));
 
 // Health check
 app.get('/api/health', (req, res) => {

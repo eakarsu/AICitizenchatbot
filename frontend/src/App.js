@@ -19,8 +19,14 @@ import Exports from './components/Exports';
 import PermitEligibility from './components/PermitEligibility';
 import CategorizeFeedback from './components/CategorizeFeedback';
 import CustomViewsPage from './components/CustomViewsPage';
+import ServiceSlaEscalation from './components/ServiceSlaEscalation';
 import features from './config/features';
 import './App.css';
+
+import CodexCustomVizFeature from './pages/CodexCustomVizFeature';
+import CodexOperationsFeature from './pages/CodexOperationsFeature';
+
+import TimelineView from './pages/TimelineView';
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem('token');
@@ -31,6 +37,10 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/insights/timeline" element={<TimelineView />} />
+        <Route path="/codex/custom-viz" element={<CodexCustomVizFeature />} />
+        <Route path="/codex/operations" element={<CodexOperationsFeature />} />
+
         <Route path="/login" element={<Login />} />
         <Route
           path="/"
@@ -63,6 +73,7 @@ function App() {
           <Route path="permit-eligibility" element={<PermitEligibility />} />
           <Route path="categorize-feedback" element={<CategorizeFeedback />} />
           <Route path="custom-views" element={<CustomViewsPage />} />
+          <Route path="service-sla-escalation" element={<ServiceSlaEscalation />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
