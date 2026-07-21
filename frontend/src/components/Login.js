@@ -10,12 +10,6 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleAutoFill = () => {
-    setEmail('admin@county.gov');
-    setPassword('admin123');
-    setError('');
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -84,9 +78,6 @@ function Login() {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
 
-          <button type="button" className="btn btn-secondary login-btn" onClick={handleAutoFill}>
-            Auto-fill Demo Credentials
-          </button>
         </form>
 
         <div className="login-footer">

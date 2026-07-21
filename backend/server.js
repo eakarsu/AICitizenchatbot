@@ -2,12 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+  throw new Error('JWT_SECRET must be configured with at least 32 characters');
+}
 
 const app = express();
 const PORT = process.env.BACKEND_PORT || 3001;
 
-app.use(cors());
-app.use(express.json());
+app.use(cors({ origin: (process.env.CORS_ORIGIN || 'http://localhost:3000').split(','), credentials: true }));
+app.use(express.json({ limit: '1mb' }));
 
 // Existing routes
 app.use('/api/auth', require('./routes/auth'));
@@ -43,6 +46,7 @@ app.use('/api/ai', require('./routes/aiBacklog'));
 // Custom Views (Citizen Views) — 4 synthesized endpoints
 app.use('/api/custom-views', require('./routes/customViews'));
 app.use('/api/service-sla-escalation', require('./routes/serviceSlaEscalation'));
+app.use('/api/governed-service', require('./routes/governedService'));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -60,16 +64,3 @@ app.use('/api/municipality-smb', require('./routes/municipalitySmbWhiteLabel'));
 app.listen(PORT, () => {
   console.log(`Backend server running on port ${PORT}`);
 });
-
-
-// === Batch 01 Gaps & Frontend Mounts ===
-app.use('/api/gap-0-mounted-ai-endpoints-in-chatbot-js-chatbotnew-js', require('./routes/gap_0_mounted_ai_endpoints_in_chatbot_js_chatbotnew_js'));
-app.use('/api/gap-no-multilingual-support-for-non-english-speaking-r', require('./routes/gap_no_multilingual_support_for_non_english_speaking_r'));
-app.use('/api/gap-no-ai-311-ticket-triage-and-routing', require('./routes/gap_no_ai_311_ticket_triage_and_routing'));
-app.use('/api/gap-no-ai-form-filling-assistance-for-permits-licenses', require('./routes/gap_no_ai_form_filling_assistance_for_permits_licenses'));
-app.use('/api/gap-frontend-pages-folder-is-empty-no-spa-ui-shipped', require('./routes/gap_frontend_pages_folder_is_empty_no_spa_ui_shipped'));
-app.use('/api/gap-notification-routes-exist-but-no-sms-email-deliver', require('./routes/gap_notification_routes_exist_but_no_sms_email_deliver'));
-app.use('/api/gap-no-webhook-outbound-api', require('./routes/gap_no_webhook_outbound_api'));
-app.use('/api/gap-no-gis-mapping-integration', require('./routes/gap_no_gis_mapping_integration'));
-app.use('/api/gap-no-accessibility-wcag-audits-and-voice-first-inter', require('./routes/gap_no_accessibility_wcag_audits_and_voice_first_inter'));
-app.use('/api/gap-no-sla-tracking-on-service-catalog', require('./routes/gap_no_sla_tracking_on_service_catalog'));
