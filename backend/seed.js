@@ -2,6 +2,12 @@ require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') }
 const pool = require('./db');
 const bcrypt = require('bcryptjs');
 
+function requireDemoPassword() {
+  const password = process.env.DEMO_PASSWORD || process.env.SEED_DEMO_PASSWORD || process.env.DEMO_SEED_PASSWORD || '';
+  if (password.length < 12 || password.length > 1024) throw new Error('DEMO_PASSWORD must contain 12-1024 characters');
+  return password;
+}
+
 async function seed() {
   const client = await pool.connect();
 
@@ -198,7 +204,7 @@ async function seed() {
 
     // ── Seed users ───────────────────────────────────────────────────
     console.log('Seeding users...');
-    const adminHash = await bcrypt.hash('admin123', 10);
+    const adminHash = await bcrypt.hash(requireDemoPassword(), 10);
     await client.query(`
       INSERT INTO users (name, email, password, role) VALUES
         ('County Admin', 'admin@county.gov', $1, 'admin'),
@@ -207,7 +213,7 @@ async function seed() {
         ('Sarah Chen', 'schen@county.gov', $1, 'resident'),
         ('David Okafor', 'dokafor@county.gov', $1, 'resident')
     `, [adminHash]);
-    console.log('  -> 5 users seeded (admin: admin@county.gov / admin123)');
+    console.log('Demo login users provisioned from the local environment.');
 
     // ── Seed documents ───────────────────────────────────────────────
     console.log('Seeding documents...');
@@ -430,7 +436,7 @@ async function seed() {
     console.log('  -> 15 ordinances seeded');
 
     console.log('\nDatabase seeding completed successfully!');
-    console.log('Admin login: admin@county.gov / admin123');
+    console.log('Demo login users provisioned from the local environment.');
 
   } catch (err) {
     console.error('Error seeding database:', err.message);
