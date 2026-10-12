@@ -1,6 +1,8 @@
+import AIReport from './AIReport';
+import FullAIExamples, { useFullAIExamples } from './FullAIExamples.jsx';
 import React, { useState } from 'react';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = '';
 
 const LANGUAGES = [
   { code: 'en', name: 'English' },
@@ -16,6 +18,7 @@ const LANGUAGES = [
 ];
 
 function MultiLanguage() {
+  const fullAIExamples = useFullAIExamples();
   const [question, setQuestion] = useState('');
   const [language, setLanguage] = useState('es');
   const [loading, setLoading] = useState(false);
@@ -36,7 +39,7 @@ function MultiLanguage() {
         body: JSON.stringify({ message }),
       });
       const data = await res.json();
-      setResponse(data.response || data.error || 'No response');
+      setResponse(data.data?.response || data.response || data.error || 'No response');
     } catch (err) {
       setResponse('Error: ' + err.message);
     }
@@ -50,16 +53,16 @@ function MultiLanguage() {
         <p>Ask any county question in your preferred language; AI responds in your chosen language.</p>
       </div>
 
-      <form onSubmit={submit} className="card" style={{ padding: 24 }}>
+      <form onSubmit={submit} className="card" style={{ padding: 24 }} data-full-ai-workspace="MultiLanguage"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
         <label style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>Response Language</label>
-        <select value={language} onChange={(e) => setLanguage(e.target.value)} style={{ width: '100%', padding: 12, borderRadius: 8, border: '1px solid #ccc', marginBottom: 16 }}>
+        <select value={language} onChange={(e) => setLanguage(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: language, change: (e) => setLanguage(e.target.value), label: "language" }, "language")} style={{ width: '100%', padding: 12, borderRadius: 8, border: '1px solid #ccc', marginBottom: 16 }}>
           {LANGUAGES.map((l) => <option key={l.code} value={l.code}>{l.name}</option>)}
         </select>
 
         <label style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>Your Question</label>
         <textarea
           value={question}
-          onChange={(e) => setQuestion(e.target.value)}
+          onChange={(e) => setQuestion(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: question, change: (e) => setQuestion(e.target.value), label: "question", sample: ["How do I apply for a building permit and what documents are required?", "Where can I report a missed trash pickup in my neighborhood?", "How do I schedule an appointment for a property tax appeal?"] }, "question")}
           placeholder="e.g., How do I apply for a building permit?"
           rows={4}
           style={{ width: '100%', padding: 12, borderRadius: 8, border: '1px solid #ccc' }}
@@ -72,12 +75,7 @@ function MultiLanguage() {
         </button>
       </form>
 
-      {response && (
-        <div className="card" style={{ marginTop: 24, padding: 24 }}>
-          <h2 style={{ marginTop: 0 }}>{LANGUAGES.find((l) => l.code === language)?.name} Response</h2>
-          <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, direction: ['ar'].includes(language) ? 'rtl' : 'ltr' }}>{response}</div>
-        </div>
-      )}
+      {response && <AIReport response={response} title="Translated response" />}
     </div>
   );
 }

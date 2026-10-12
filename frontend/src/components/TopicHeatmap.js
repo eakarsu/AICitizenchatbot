@@ -22,7 +22,8 @@ function TopicHeatmap() {
   if (error) return <div style={{ padding: 12, color: '#b91c1c' }}>Error: {error}</div>;
   if (!data) return null;
 
-  const { distribution, total_queries, top_topic } = data;
+  const { total_queries, top_topic } = data;
+  const distribution = Array.isArray(data.distribution) ? data.distribution : [];
   const max = Math.max(...distribution.map((d) => d.count));
   const palette = ['#1d4ed8', '#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe', '#dbeafe'];
 

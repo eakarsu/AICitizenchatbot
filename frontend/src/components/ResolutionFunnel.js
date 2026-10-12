@@ -22,8 +22,11 @@ function ResolutionFunnel() {
   if (error) return <div style={{ padding: 12, color: '#b91c1c' }}>Error: {error}</div>;
   if (!data) return null;
 
-  const { topics, departments, matrix, total_routings } = data;
-  const max = Math.max(...matrix.flat());
+  const { total_routings } = data;
+  const topics = Array.isArray(data.topics) ? data.topics : [];
+  const departments = Array.isArray(data.departments) ? data.departments : [];
+  const matrix = Array.isArray(data.matrix) ? data.matrix : [];
+  const max = Math.max(0, ...matrix.filter(Array.isArray).flat());
   const color = (v) => {
     const t = max ? v / max : 0;
     const r = Math.round(220 - t * 180);
@@ -57,7 +60,7 @@ function ResolutionFunnel() {
             {topics.map((t, ti) => (
               <tr key={t}>
                 <td style={{ padding: '4px 8px', fontWeight: 600, color: '#111827' }}>{t}</td>
-                {matrix[ti].map((v, di) => (
+                {(Array.isArray(matrix[ti]) ? matrix[ti] : []).map((v, di) => (
                   <td key={di} title={`${t} → ${departments[di]} = ${v}`}
                     style={{
                       background: color(v),

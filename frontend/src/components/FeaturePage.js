@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { recordList } from './recordList';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = '';
 
 function FeaturePage({ feature }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -22,16 +24,15 @@ function FeaturePage({ feature }) {
 
   const fetchItems = useCallback(async () => {
     setLoading(true);
+    setLoadError('');
     try {
       const res = await fetch(`${API_BASE}${feature.endpoint}`, { headers });
       const data = await res.json();
-      if (data.success && Array.isArray(data.data)) {
-        setItems(data.data);
-      } else {
-        setItems([]);
-      }
-    } catch {
+      if (!res.ok || data.success === false) throw new Error(data.error || 'Unable to load records');
+      setItems(recordList(data, feature.key));
+    } catch (error) {
       setItems([]);
+      setLoadError(error.message || 'Unable to load records');
     } finally {
       setLoading(false);
     }
@@ -193,6 +194,7 @@ function FeaturePage({ feature }) {
         <span className="item-count">{filteredItems.length} items</span>
       </div>
 
+      {loadError && <div role="alert" className="login-error">{loadError}</div>}
       {loading ? (
         <div className="loading-state">
           <div className="spinner"></div>

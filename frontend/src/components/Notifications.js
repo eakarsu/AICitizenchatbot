@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { recordList } from './recordList';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = '';
 
 function Notifications() {
   const [items, setItems] = useState([]);
@@ -21,7 +22,8 @@ function Notifications() {
     try {
       const res = await fetch(`${API_BASE}/api/notifications`, { headers });
       const data = await res.json();
-      setItems(Array.isArray(data) ? data : (data.notifications || data.items || []));
+      if (!res.ok || data.success === false) throw new Error(data.error || 'Failed to load notifications');
+      setItems(recordList(data, 'notifications'));
       try {
         const c = await fetch(`${API_BASE}/api/notifications/unread-count`, { headers });
         const cd = await c.json();

@@ -1,8 +1,11 @@
+import AIReport from './AIReport';
+import FullAIExamples, { useFullAIExamples } from './FullAIExamples.jsx';
 import React, { useState } from 'react';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = '';
 
 function AppointmentHelper() {
+  const fullAIExamples = useFullAIExamples();
   const [serviceType, setServiceType] = useState('');
   const [datesInput, setDatesInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -42,12 +45,12 @@ function AppointmentHelper() {
         <p>Get a personalized document checklist and scheduling guidance for any county service.</p>
       </div>
 
-      <form onSubmit={submit} className="card" style={{ padding: 24 }}>
+      <form onSubmit={submit} className="card" style={{ padding: 24 }} data-full-ai-workspace="AppointmentHelper"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
         <label style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>Service Type</label>
         <input
           type="text"
           value={serviceType}
-          onChange={(e) => setServiceType(e.target.value)}
+          onChange={(e) => setServiceType(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: serviceType, change: (e) => setServiceType(e.target.value), label: "serviceType", sample: ["Marriage license", "Building inspection", "Property tax appeal"] }, "serviceType")}
           placeholder="e.g., Marriage license, Building inspection, Property tax appeal"
           style={{ width: '100%', padding: 12, borderRadius: 8, border: '1px solid #ccc', marginBottom: 12 }}
           maxLength={200}
@@ -57,7 +60,7 @@ function AppointmentHelper() {
         <input
           type="text"
           value={datesInput}
-          onChange={(e) => setDatesInput(e.target.value)}
+          onChange={(e) => setDatesInput(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: datesInput, change: (e) => setDatesInput(e.target.value), label: "datesInput", sample: ["2026-11-05, 2026-11-12", "2026-11-12, 2026-11-19", "2026-11-19, 2026-11-26"] }, "datesInput")}
           placeholder="e.g., 2025-05-10, 2025-05-15"
           style={{ width: '100%', padding: 12, borderRadius: 8, border: '1px solid #ccc' }}
         />
@@ -68,35 +71,7 @@ function AppointmentHelper() {
 
       {error && <div className="alert alert-error" style={{ marginTop: 16, padding: 12, background: '#fee', color: '#c00', borderRadius: 8 }}>{error}</div>}
 
-      {result && (
-        <div className="card" style={{ marginTop: 24, padding: 24 }}>
-          <h2 style={{ marginTop: 0 }}>{'\uD83D\uDCCB'} {result.service_name || serviceType}</h2>
-          {result.department && <div style={{ marginBottom: 12 }}><strong>Department:</strong> {result.department}</div>}
-          {result.document_checklist?.length > 0 && (
-            <div style={{ marginBottom: 16 }}>
-              <strong>{'\u2705'} Document Checklist:</strong>
-              <ul style={{ marginTop: 8 }}>
-                {result.document_checklist.map((d, i) => <li key={i}>{d}</li>)}
-              </ul>
-            </div>
-          )}
-          {result.appointment_tips?.length > 0 && (
-            <div style={{ marginBottom: 16 }}>
-              <strong>{'\uD83D\uDCA1'} Tips:</strong>
-              <ul style={{ marginTop: 8 }}>
-                {result.appointment_tips.map((t, i) => <li key={i}>{t}</li>)}
-              </ul>
-            </div>
-          )}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: 12 }}>
-            {result.estimated_duration_minutes && <div><strong>Duration:</strong> {result.estimated_duration_minutes} min</div>}
-            {result.fee && <div><strong>Fee:</strong> {result.fee}</div>}
-          </div>
-          {result.scheduling_note && <div style={{ marginTop: 16, padding: 12, background: '#f0f4f8', borderRadius: 8 }}><strong>Scheduling:</strong> {result.scheduling_note}</div>}
-          {result.availability_note && <div style={{ marginTop: 8, padding: 12, background: '#fef9c3', borderRadius: 8 }}><strong>Availability:</strong> {result.availability_note}</div>}
-          {result.raw && <pre style={{ background: '#f8f8f8', padding: 12, borderRadius: 8, overflowX: 'auto' }}>{result.raw}</pre>}
-        </div>
-      )}
+      {result && <AIReport response={result} title="Appointment guide" />}
     </div>
   );
 }

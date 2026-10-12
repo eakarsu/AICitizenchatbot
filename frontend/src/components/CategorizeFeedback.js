@@ -1,8 +1,13 @@
+import AIReport from './AIReport';
+
+import FullAIExamples, { useFullAIExamples } from "./FullAIExamples.jsx";
 import React, { useState } from 'react';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = '';
 
 function CategorizeFeedback() {
+  const fullAIExamples = useFullAIExamples();
+
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -51,7 +56,7 @@ function CategorizeFeedback() {
         <p>Auto-tag citizen feedback for routing — primary topic, sentiment, urgency, and recommended department.</p>
       </div>
 
-      <form onSubmit={submit} className="card" style={{ padding: 24 }}>
+      <form onSubmit={submit} className="card" style={{ padding: 24 }} data-full-ai-workspace="CategorizeFeedback"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
         <label style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>Citizen Feedback</label>
         <textarea
           value={text}
@@ -60,7 +65,11 @@ function CategorizeFeedback() {
           rows={6}
           style={{ width: '100%', padding: 12, borderRadius: 8, border: '1px solid #ccc' }}
           maxLength={4000}
-          required
+          required data-full-ai-field={fullAIExamples.bind({ current: text, change: (e) => setText(e.target.value), label: "text", sample: [
+            'The streetlight beside the Oak Street bus stop has been out for three nights. Please arrange an inspection.',
+            'Trash collection was missed on Pine Avenue twice this month. Residents need the revised pickup date.',
+            'Water is pooling across the school crosswalk after rain. Please route this for urgent review.'
+          ] }, "feedback-text")}
         />
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12 }}>
           <small>{text.length}/4000 characters</small>
@@ -72,34 +81,7 @@ function CategorizeFeedback() {
 
       {error && <div className="alert alert-error" style={{ marginTop: 16, padding: 12, background: '#fee', color: '#c00', borderRadius: 8 }}>{error}</div>}
 
-      {result && (
-        <div className="card" style={{ marginTop: 24, padding: 24 }}>
-          <h2 style={{ marginTop: 0 }}>{'📌'} Classification</h2>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: 12, marginBottom: 16 }}>
-            {result.primary_topic && <div style={{ padding: 12, background: '#dbeafe', borderRadius: 8 }}><strong>Topic:</strong><div>{result.primary_topic}</div></div>}
-            {result.sentiment && <div style={{ padding: 12, background: sentimentColor(result.sentiment), borderRadius: 8 }}><strong>Sentiment:</strong><div>{result.sentiment}</div></div>}
-            {result.urgency && <div style={{ padding: 12, background: urgencyColor(result.urgency), borderRadius: 8 }}><strong>Urgency:</strong><div>{result.urgency}</div></div>}
-            {result.recommended_department && <div style={{ padding: 12, background: '#f3e8ff', borderRadius: 8 }}><strong>Department:</strong><div>{result.recommended_department}</div></div>}
-            {result.recommended_action && <div style={{ padding: 12, background: '#fef3c7', borderRadius: 8 }}><strong>Action:</strong><div>{result.recommended_action}</div></div>}
-          </div>
-
-          {result.tags?.length > 0 && (
-            <div style={{ marginBottom: 16 }}>
-              <strong>Tags:</strong>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 6 }}>
-                {result.tags.map((t, i) => (
-                  <span key={i} style={{ padding: '4px 10px', borderRadius: 999, background: '#e5e7eb', fontSize: 13 }}>{t}</span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {result.summary && <div style={{ marginBottom: 12 }}><strong>Summary:</strong> {result.summary}</div>}
-          {result.notes && <div style={{ marginTop: 12, padding: 12, background: '#f0f4f8', borderRadius: 8 }}><em>{result.notes}</em></div>}
-          {result.raw && <pre style={{ background: '#f8f8f8', padding: 12, borderRadius: 8, overflowX: 'auto' }}>{result.raw}</pre>}
-        </div>
-      )}
+      {result && <AIReport response={result} title="Classification" />}
     </div>
   );
 }

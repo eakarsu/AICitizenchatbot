@@ -1,3 +1,4 @@
+import AIReportLibrary from "./AIReportLibrary";
 import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import features from '../config/features';
@@ -125,7 +126,7 @@ function Layout() {
             {sidebarCollapsed ? '\uD83D\uDEAA' : 'Sign Out'}
           </button>
         </div>
-      </aside>
+      <AIReportLibrary /></aside>
 
       <main className="main-content">
         <Outlet />

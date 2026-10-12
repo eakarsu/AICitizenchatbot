@@ -1,8 +1,11 @@
+import { StructuredReportValue } from './AIReport';
+import FullAIExamples, { useFullAIExamples } from './FullAIExamples.jsx';
 import React, { useState, useEffect, useRef } from 'react';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = '';
 
 function Chatbot() {
+  const fullAIExamples = useFullAIExamples();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -150,7 +153,7 @@ function Chatbot() {
               <div className="message-bubble">
                 {msg.type === 'ai' && <span className="ai-avatar">{'\uD83E\uDD16'}</span>}
                 <div className="message-content">
-                  <p className="message-text">{msg.text}</p>
+                  {msg.type === 'ai' ? <StructuredReportValue value={msg.text} /> : <p className="message-text">{msg.text}</p>}
 
                   {msg.type === 'ai' && msg.metadata && (
                     <div className="ai-metadata">
@@ -271,12 +274,12 @@ function Chatbot() {
           <div ref={messagesEndRef} />
         </div>
 
-        <form className="chat-input-area" onSubmit={sendMessage}>
+        <form className="chat-input-area" onSubmit={sendMessage} data-full-ai-workspace="Chatbot"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
           <input
             ref={inputRef}
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: input, change: (e) => setInput(e.target.value), label: "input", sample: ["What documents do I need for a building permit?", "How can I report a missed trash pickup?", "Where do I schedule a property tax appeal appointment?"] }, "input")}
             placeholder="Type your question..."
             disabled={loading}
           />

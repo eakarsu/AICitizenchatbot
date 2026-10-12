@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import features from '../config/features';
+import { recordList } from './recordList';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = '';
 
 function Dashboard() {
   const [counts, setCounts] = useState({});
@@ -23,11 +24,7 @@ function Dashboard() {
           try {
             const res = await fetch(`${API_BASE}${feature.endpoint}`, { headers });
             const data = await res.json();
-            if (data.success && Array.isArray(data.data)) {
-              results[feature.key] = data.data.length;
-            } else {
-              results[feature.key] = 0;
-            }
+            results[feature.key] = res.ok ? recordList(data, feature.key).length : 0;
           } catch {
             results[feature.key] = 0;
           }

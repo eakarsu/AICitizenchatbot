@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { recordList } from './recordList';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = '';
 
 function AdminAnalytics() {
   const [stats, setStats] = useState(null);
@@ -21,9 +22,9 @@ function AdminAnalytics() {
         fetch(`${API_BASE}/api/analytics/satisfaction`, { headers }).then((r) => r.json()),
         fetch(`${API_BASE}/api/admin/unanswered?limit=50`, { headers }).then((r) => r.json()),
       ]);
-      if (s.success) setStats(s.data);
-      if (sat.success) setSatisfaction(sat.data);
-      if (u.success) setUnanswered(u.data || []);
+      if (s.success) setStats({ ...s.data, top_10_questions: recordList(s.data?.top_10_questions), chats_last_7_days: recordList(s.data?.chats_last_7_days) });
+      if (sat.success) setSatisfaction({ ...sat.data, rating_distribution: recordList(sat.data?.rating_distribution), recent_comments: recordList(sat.data?.recent_comments) });
+      if (u.success) setUnanswered(recordList(u));
     } catch (err) {
       console.error(err);
     }

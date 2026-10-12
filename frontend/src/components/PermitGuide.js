@@ -1,8 +1,11 @@
+import AIReport from './AIReport';
+import FullAIExamples, { useFullAIExamples } from './FullAIExamples.jsx';
 import React, { useState } from 'react';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = '';
 
 function PermitGuide() {
+  const fullAIExamples = useFullAIExamples();
   const [project, setProject] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -37,11 +40,11 @@ function PermitGuide() {
         <p>Get AI-curated permit requirements, fees, and timelines for your project.</p>
       </div>
 
-      <form onSubmit={submit} className="card" style={{ padding: 24 }}>
+      <form onSubmit={submit} className="card" style={{ padding: 24 }} data-full-ai-workspace="PermitGuide"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
         <label style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>Project Description</label>
         <textarea
           value={project}
-          onChange={(e) => setProject(e.target.value)}
+          onChange={(e) => setProject(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: project, change: (e) => setProject(e.target.value), label: "project", sample: ["I plan to replace my home deck with a larger deck and need to know permit and inspection steps.", "I am converting a garage into a home office; explain zoning and building permit requirements.", "I plan to open a small bakery in an existing storefront; identify likely licenses and inspections."] }, "project")}
           placeholder="e.g., I want to add a 200 sq ft deck to the back of my single-family home"
           rows={5}
           style={{ width: '100%', padding: 12, borderRadius: 8, border: '1px solid #ccc' }}
@@ -58,49 +61,7 @@ function PermitGuide() {
 
       {error && <div className="alert alert-error" style={{ marginTop: 16, padding: 12, background: '#fee', color: '#c00', borderRadius: 8 }}>{error}</div>}
 
-      {result && (
-        <div className="card" style={{ marginTop: 24, padding: 24 }}>
-          <h2 style={{ marginTop: 0 }}>{'\uD83D\uDCCB'} Permit Requirements</h2>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: 12, marginBottom: 16 }}>
-            {result.total_estimated_fees && <div style={{ padding: 12, background: '#fef3c7', borderRadius: 8 }}><strong>Total Fees:</strong><div>{result.total_estimated_fees}</div></div>}
-            {result.total_estimated_timeline && <div style={{ padding: 12, background: '#dbeafe', borderRadius: 8 }}><strong>Timeline:</strong><div>{result.total_estimated_timeline}</div></div>}
-            {result.contact_department && <div style={{ padding: 12, background: '#f3e8ff', borderRadius: 8 }}><strong>Contact:</strong><div>{result.contact_department}</div></div>}
-          </div>
-
-          {result.required_permits?.length > 0 && (
-            <div style={{ marginBottom: 16 }}>
-              <h3>Required Permits</h3>
-              {result.required_permits.map((p, i) => (
-                <div key={i} style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: 16, marginBottom: 12 }}>
-                  <h4 style={{ marginTop: 0 }}>{p.name}</h4>
-                  {p.description && <p style={{ color: '#666', fontSize: 14 }}>{p.description}</p>}
-                  <div style={{ display: 'flex', gap: 12, fontSize: 14, color: '#374151', marginBottom: 8 }}>
-                    {p.fee && <span><strong>Fee:</strong> {p.fee}</span>}
-                    {p.processing_time && <span><strong>Processing:</strong> {p.processing_time}</span>}
-                  </div>
-                  {p.application_steps?.length > 0 && (
-                    <div>
-                      <strong>Steps:</strong>
-                      <ol style={{ marginTop: 4 }}>{p.application_steps.map((s, j) => <li key={j}>{s}</li>)}</ol>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {result.additional_requirements?.length > 0 && (
-            <div style={{ marginBottom: 16 }}>
-              <strong>Additional Requirements:</strong>
-              <ul>{result.additional_requirements.map((r, i) => <li key={i}>{r}</li>)}</ul>
-            </div>
-          )}
-
-          {result.notes && <div style={{ marginTop: 12, padding: 12, background: '#f0f4f8', borderRadius: 8 }}><em>{result.notes}</em></div>}
-          {result.raw && <pre style={{ background: '#f8f8f8', padding: 12, borderRadius: 8, overflowX: 'auto' }}>{result.raw}</pre>}
-        </div>
-      )}
+      {result && <AIReport response={result} title="Permit guide" />}
     </div>
   );
 }

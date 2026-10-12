@@ -39,6 +39,35 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Local development demo access uses the existing configured account. The
+// password stays on the server and no account is created or changed here.
+router.post('/demo-login', async (req, res) => {
+  const address = req.socket.remoteAddress || '';
+  const local = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(address);
+  const pair = process.env.DEMO_EMAIL && process.env.DEMO_PASSWORD
+    ? [process.env.DEMO_EMAIL, process.env.DEMO_PASSWORD]
+    : [process.env.DEMO_ADMIN_EMAIL, process.env.DEMO_ADMIN_PASSWORD];
+  const [email, password] = pair;
+  if (process.env.NODE_ENV === 'production' || !local || !email || !password) {
+    return res.status(403).json({ success: false, error: 'Local demo login is unavailable. Use your configured credentials.' });
+  }
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    const user = result.rows[0];
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ success: false, error: 'The configured demo account is unavailable.' });
+    }
+    const token = jwt.sign(
+      { id: user.id, email: user.email, name: user.name, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+    res.json({ success: true, data: { token, user: { id: user.id, name: user.name, email: user.email, role: user.role } } });
+  } catch (_) {
+    res.status(500).json({ success: false, error: 'Demo login could not be completed.' });
+  }
+});
+
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;

@@ -1,8 +1,11 @@
+import AIReport from './AIReport';
+import FullAIExamples, { useFullAIExamples } from './FullAIExamples.jsx';
 import React, { useState } from 'react';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = '';
 
 function ResourceNavigator() {
+  const fullAIExamples = useFullAIExamples();
   const [needs, setNeeds] = useState({
     financial: false,
     housing: false,
@@ -34,7 +37,7 @@ function ResourceNavigator() {
         body: JSON.stringify({ message }),
       });
       const data = await res.json();
-      setResponse(data.response || data.error || 'No response.');
+      setResponse(data.data?.response || data.response || data.error || 'No response.');
     } catch (err) {
       setResponse('Error: ' + err.message);
     }
@@ -48,7 +51,7 @@ function ResourceNavigator() {
         <p>Get connected to financial, housing, health, and other community resources matching your needs.</p>
       </div>
 
-      <form onSubmit={submit} className="card" style={{ padding: 24 }}>
+      <form onSubmit={submit} className="card" style={{ padding: 24 }} data-full-ai-workspace="ResourceNavigator"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
         <h3>What do you need help with?</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginBottom: 16 }}>
           {Object.entries(needs).map(([key, val]) => (
@@ -58,7 +61,11 @@ function ResourceNavigator() {
               borderRadius: 8, cursor: 'pointer', textTransform: 'capitalize',
               background: val ? '#dbeafe' : '#fff',
             }}>
-              <input type="checkbox" checked={val} onChange={() => toggleNeed(key)} />
+              <input type="checkbox" checked={val} onChange={() => toggleNeed(key)} data-full-ai-field={fullAIExamples.bind({ current: val, change: () => toggleNeed(key), label: key, sample: {
+                financial: [false, true, false], housing: [false, true, false], food: [true, false, false],
+                health: [true, false, false], childcare: [false, false, true], employment: [false, false, true],
+                transportation: [true, false, false], legal: [false, true, false]
+              }[key] }, `need-${key}`)} />
               {key}
             </label>
           ))}
@@ -67,7 +74,7 @@ function ResourceNavigator() {
         <label style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>Additional Details (optional)</label>
         <textarea
           value={details}
-          onChange={(e) => setDetails(e.target.value)}
+          onChange={(e) => setDetails(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: details, change: (e) => setDetails(e.target.value), label: "details", sample: ["I need help finding food assistance and reliable transportation to a local clinic.", "My rent is overdue and I need housing and legal assistance options.", "I am looking for childcare and employment support while returning to work."] }, "details")}
           placeholder="e.g., I'm a senior living alone and need help with meal delivery and transportation to medical appointments."
           rows={4}
           style={{ width: '100%', padding: 12, borderRadius: 8, border: '1px solid #ccc' }}
@@ -79,12 +86,7 @@ function ResourceNavigator() {
         </button>
       </form>
 
-      {response && (
-        <div className="card" style={{ marginTop: 24, padding: 24 }}>
-          <h2 style={{ marginTop: 0 }}>{'\uD83D\uDCDD'} Recommended Resources</h2>
-          <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{response}</div>
-        </div>
-      )}
+      {response && <AIReport response={response} title="Recommended resources" />}
     </div>
   );
 }

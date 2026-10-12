@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { recordList } from './recordList';
 
 const API_BASE = '';
 
@@ -18,8 +19,9 @@ function IntentTrainingEditor() {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       const j = await r.json();
-      setRules((j.data && j.data.rules) || []);
-      setDepartments((j.data && j.data.departments) || []);
+      if (!r.ok || j.success === false) throw new Error(j.error || 'Unable to load routing rules');
+      setRules(recordList(j, 'rules'));
+      setDepartments(recordList(j.data?.departments));
     } catch (e) { setMsg('Load error: ' + (e.message || e)); }
     setLoading(false);
   };

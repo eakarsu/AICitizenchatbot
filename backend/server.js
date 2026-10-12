@@ -61,6 +61,14 @@ app.use('/api/ordinance-rag', require('./routes/ordinanceRag')); // apply pass 6
 app.use('/api/emergency-broadcast', require('./routes/emergencyBroadcast')); // apply pass 6 — audit custom suggestion
 
 app.use('/api/municipality-smb', require('./routes/municipalitySmbWhiteLabel')); // apply pass 6 — audit custom suggestion
+
+// Advisory AI reports only; native execution and approval routes stay unchanged.
+const aiWorkspaceSupport = require("./aiWorkspaceAdapters.cjs");
+const aiWorkspaceDatabase = require("./db.js");
+app.use('/api/report-workspace', require("./aiWorkspace.cjs").createAIWorkspaceRouter({
+  pool: aiWorkspaceDatabase, authenticateToken: require("./middleware/auth.js").authenticateToken,
+  aiRateLimiter: aiWorkspaceSupport.createWorkspaceLimiter(), features: require("./aiWorkspaceFeatures.json"),
+}));
 app.listen(PORT, () => {
   console.log(`Backend server running on port ${PORT}`);
 });

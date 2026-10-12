@@ -1,8 +1,11 @@
+import AIReport from './AIReport';
+import FullAIExamples, { useFullAIExamples } from './FullAIExamples.jsx';
 import React, { useState } from 'react';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = '';
 
 function ServiceFinder() {
+  const fullAIExamples = useFullAIExamples();
   const [need, setNeed] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -37,11 +40,11 @@ function ServiceFinder() {
         <p>Describe what you need; AI will route you to the correct department and steps.</p>
       </div>
 
-      <form onSubmit={submit} className="card" style={{ padding: 24 }}>
+      <form onSubmit={submit} className="card" style={{ padding: 24 }} data-full-ai-workspace="ServiceFinder"><FullAIExamples controller={fullAIExamples} disabled={Boolean(loading)} />
         <label style={{ display: 'block', marginBottom: 8, fontWeight: 600 }}>What do you need help with?</label>
         <textarea
           value={need}
-          onChange={(e) => setNeed(e.target.value)}
+          onChange={(e) => setNeed(e.target.value)} data-full-ai-field={fullAIExamples.bind({ current: need, change: (e) => setNeed(e.target.value), label: "need", sample: ["I need to renew my vehicle registration and need to know the county office, required documents, and fees.", "My sidewalk is damaged near the public library. Which service handles repair requests and what information should I provide?", "I am opening a small restaurant and need a checklist of local licenses, inspections, and application steps."] }, "need")}
           placeholder="e.g., I need to renew my dog license and update my address"
           rows={4}
           style={{ width: '100%', padding: 12, borderRadius: 8, border: '1px solid #ccc' }}
@@ -58,33 +61,7 @@ function ServiceFinder() {
 
       {error && <div className="alert alert-error" style={{ marginTop: 16, padding: 12, background: '#fee', color: '#c00', borderRadius: 8 }}>{error}</div>}
 
-      {result && (
-        <div className="card" style={{ marginTop: 24, padding: 24 }}>
-          <h2 style={{ marginTop: 0 }}>{'\u2705'} Recommendation</h2>
-          {result.department && <div style={{ marginBottom: 12 }}><strong>Department:</strong> {result.department}</div>}
-          {result.service && <div style={{ marginBottom: 12 }}><strong>Service:</strong> {result.service}</div>}
-          {result.contact_info && (
-            <div style={{ marginBottom: 12 }}>
-              <strong>Contact:</strong>
-              <div style={{ marginLeft: 16 }}>
-                {result.contact_info.phone && <div>Phone: {result.contact_info.phone}</div>}
-                {result.contact_info.email && <div>Email: {result.contact_info.email}</div>}
-                {result.contact_info.website && <div>Web: <a href={result.contact_info.website} target="_blank" rel="noreferrer">{result.contact_info.website}</a></div>}
-              </div>
-            </div>
-          )}
-          {result.steps?.length > 0 && (
-            <div style={{ marginBottom: 12 }}>
-              <strong>Steps:</strong>
-              <ol style={{ marginTop: 8 }}>{result.steps.map((s, i) => <li key={i}>{s}</li>)}</ol>
-            </div>
-          )}
-          {result.estimated_time && <div><strong>Estimated time:</strong> {result.estimated_time}</div>}
-          {result.fees && <div><strong>Fees:</strong> {result.fees}</div>}
-          {result.notes && <div style={{ marginTop: 12, padding: 12, background: '#f0f4f8', borderRadius: 8 }}><em>{result.notes}</em></div>}
-          {result.raw && <pre style={{ background: '#f8f8f8', padding: 12, borderRadius: 8, overflowX: 'auto' }}>{result.raw}</pre>}
-        </div>
-      )}
+      {result && <AIReport response={result} title="Service recommendations" />}
     </div>
   );
 }
