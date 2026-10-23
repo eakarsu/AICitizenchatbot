@@ -47,6 +47,10 @@ app.use('/api/ai', require('./routes/aiBacklog'));
 app.use('/api/custom-views', require('./routes/customViews'));
 app.use('/api/service-sla-escalation', require('./routes/serviceSlaEscalation'));
 app.use('/api/governed-service', require('./routes/governedService'));
+app.use('/api/feature-pack', require('./routes/featurePack').createFeaturePackRouter({
+  authenticate: require('./middleware/auth').authenticateToken,
+  fetchRecords: async () => { try { const r = await require('./db').query('SELECT * FROM services ORDER BY name ASC LIMIT 5000'); return r.rows; } catch (_) { return []; } },
+}));
 
 // Health check
 app.get('/api/health', (req, res) => {

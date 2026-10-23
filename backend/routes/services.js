@@ -5,7 +5,15 @@ const { authenticateToken } = require('../middleware/auth');
 
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM services ORDER BY name ASC');
+    const { q, search, status, category, department } = req.query;
+    const term = q || search;
+    const cond = []; const vals = []; let i = 1;
+    if (term) { cond.push(`(name ILIKE $${i} OR description ILIKE $${i} OR category ILIKE $${i} OR department ILIKE $${i})`); vals.push(`%${term}%`); i++; }
+    if (status) { cond.push(`status = $${i++}`); vals.push(status); }
+    if (category) { cond.push(`category ILIKE $${i++}`); vals.push(`%${category}%`); }
+    if (department) { cond.push(`department ILIKE $${i++}`); vals.push(`%${department}%`); }
+    const where = cond.length ? `WHERE ${cond.join(' AND ')}` : '';
+    const result = await pool.query(`SELECT * FROM services ${where} ORDER BY name ASC`, vals);
     res.json({ success: true, data: result.rows });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
